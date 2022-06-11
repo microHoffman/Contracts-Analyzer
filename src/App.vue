@@ -1,7 +1,10 @@
 <template>
   <input class="input" v-model="address" @keyup.enter="analyzeContract" />
   <button class="button" @click="analyzeContract">Analyze contract</button>
-  <div>{{ contractInfo }}</div>
+  <!-- <div>{{ contractInfo }}</div> -->
+  <br/>
+  <br/>
+  <div v-if="contractInfo">amount of transactions: {{ contractInfo.nativeTransactions.total }}</div>
 </template>
 
 <script setup lang="ts">
@@ -10,7 +13,7 @@ import { analyzeContract as analyzeContractFunction } from "./analysis/basicInfo
 
 const address = ref("")
 
-const contractInfo = ref("")
+const contractInfo = ref()
 
 const analyzeContract = async (): Promise<void> => {
   contractInfo.value = await analyzeContractFunction(address.value)
