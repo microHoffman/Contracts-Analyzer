@@ -1,0 +1,1 @@
+export const MORALIS_WEB3_API_URL = "https://deep-index.moralis.io/api/v2"
