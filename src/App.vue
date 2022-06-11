@@ -1,22 +1,26 @@
 <template>
   <input class="input" v-model="address" @keyup.enter="analyzeContract" />
   <button class="button" @click="analyzeContract">Analyze contract</button>
-  <!-- <div>{{ contractInfo }}</div> -->
-  <br/>
-  <br/>
-  <div v-if="contractInfo">amount of transactions: {{ contractInfo.nativeTransactions.total }}</div>
+  <div v-if="contractDeployTime">
+    contract deploy time: {{ contractDeployTime }}
+  </div>
+  <div v-if="nativeTransactions">
+    amount of transactions: {{ nativeTransactions.total }}
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { analyzeContract as analyzeContractFunction } from "./analysis/basicInfo";
+import { getContractNativeTransactions, getContractDeployTime } from "./analysis/basicInfo";
 
 const address = ref("")
 
-const contractInfo = ref()
+const nativeTransactions = ref()
+const contractDeployTime = ref()
 
 const analyzeContract = async (): Promise<void> => {
-  contractInfo.value = await analyzeContractFunction(address.value)
+  getContractDeployTime(address.value).then(deployTime => (contractDeployTime.value = deployTime))
+  getContractNativeTransactions(address.value).then(contractNativeTransactions => (nativeTransactions.value = contractNativeTransactions))
 }
 </script>
 

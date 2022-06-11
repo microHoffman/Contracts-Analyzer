@@ -1,10 +1,6 @@
 import {MORALIS_CHAIN_ID, MORALIS_WEB3_API_URL} from "../constants";
 import nodeProvider from "../web3/nodeProvider";
-
-export const analyzeContract = async (contractAddress: string): Promise<any> => {
-    const nativeTransactions = await getContractNativeTransactions(contractAddress)
-    return { nativeTransactions }
-}
+import { getBlockDateTime } from "./utils";
 
 export const getContractNativeTransactions = async (contractAddress: string): Promise<any> => {
     const contractLogs = await fetch(`${MORALIS_WEB3_API_URL}/${contractAddress}?chain=${MORALIS_CHAIN_ID}`, {
@@ -14,11 +10,11 @@ export const getContractNativeTransactions = async (contractAddress: string): Pr
         }
     })
     const res = await contractLogs.json()
-    console.log('ContractNativeTransaction', contractLogs)
+    console.log('getContractNativeTransactions', contractLogs)
     return res
 }
 
-export const getContractDeployBlockNumber = async (contractAddress: string): Promise<string> => {
+export const getContractDeployTime = async (contractAddress: string): Promise<string> => {
     const latestBlock = await nodeProvider.getBlockNumber()
 
     let startBlock = 0
@@ -43,5 +39,6 @@ export const getContractDeployBlockNumber = async (contractAddress: string): Pro
     if (latestBlockWithCode === undefined) {
         return `Contract with address: ${contractAddress} was not deployed (no code found).`
     }
-    return String(latestBlockWithCode)
+
+    return await getBlockDateTime(latestBlockWithCode)
 }
