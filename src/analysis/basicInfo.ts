@@ -2,8 +2,8 @@ import {MORALIS_CHAIN_ID, MORALIS_WEB3_API_URL} from "../constants";
 import nodeProvider from "../web3/nodeProvider";
 import { getBlockDateTime } from "./utils";
 
-export const getContractNativeTransactions = async (contractAddress: string): Promise<any> => {
-    const contractLogs = await fetch(`${MORALIS_WEB3_API_URL}/${contractAddress}?chain=${MORALIS_CHAIN_ID}`, {
+export const getContractNativeTransactions = async (contractAddress: string, nextPage?: string): Promise<any> => {
+    const contractLogs = await fetch(`${MORALIS_WEB3_API_URL}/${contractAddress}?chain=${MORALIS_CHAIN_ID}${nextPage ? `&cursor=${nextPage}`: ""}`, {
         headers: {
             'Accept': 'application/json',
             'X-API-KEY': import.meta.env.VITE_MORALIS_KEY,
@@ -12,6 +12,25 @@ export const getContractNativeTransactions = async (contractAddress: string): Pr
     const res = await contractLogs.json()
     console.log('getContractNativeTransactions', contractLogs)
     return res
+}
+
+export const getContractUniqueAddressInteraction = async (contractAddress: string): Promise<any> => {
+    
+    let response = null;
+    let accumulator = [];
+    do {
+        response = await getContractNativeTransactions(contractAddress, response?.nextPage))
+  
+        for (const res of response.result) {
+          if (res) {
+            accumulator.push(res)
+          }
+        }
+        console.log('accumulator',accumulator)
+    } while (response?.nextPage)
+
+
+
 }
 
 export const getContractDeployTime = async (contractAddress: string): Promise<string> => {
