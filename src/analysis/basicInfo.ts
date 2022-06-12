@@ -14,6 +14,7 @@ export const getContractNativeTransactions = async (contractAddress: string, nex
     return res
 }
 
+/*
 export const getContractUniqueAddressInteraction = async (contractAddress: string): Promise<any> => {
     
     let response = null;
@@ -28,10 +29,8 @@ export const getContractUniqueAddressInteraction = async (contractAddress: strin
         }
         console.log('accumulator',accumulator)
     } while (response?.nextPage)
-
-
-
 }
+*/
 
 export const getContractDeployTime = async (contractAddress: string): Promise<string> => {
     const latestBlock = await nodeProvider.getBlockNumber()
