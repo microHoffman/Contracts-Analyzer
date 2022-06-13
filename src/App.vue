@@ -1,15 +1,20 @@
 <template>
-  <input class="input" v-model="address" @keyup.enter="analyzeContract" />
-  <button class="button" @click="analyzeContract">Analyze contract</button>
-  <div class="contract-deploy-time">
-    contract deploy time:
-    <div v-if="isLoadingContractDeployTime" class="loader"></div>
-    <template v-else-if="contractDeployTime">{{ contractDeployTime }}</template>
-  </div>
-  <div>
-    amount of transactions:
-    <div v-if="isLoadingNativeTransactions" class="loader"></div>
-    <template v-else-if="nativeTransactions?.total || nativeTransactions?.total === 0">{{ nativeTransactions.total }}</template>
+  <div class="wrapper">
+    <h1>Contract Analyzer</h1>
+    <div class="input-wrapper">
+      <input class="input" v-model="address" @keyup.enter="analyzeContract" />
+      <button class="button" @click="analyzeContract">Analyze contract</button>
+    </div>
+    <div class="result-item contract-deploy-time">
+      contract deploy time:
+      <div v-if="isLoadingContractDeployTime" class="loader"></div>
+      <template v-else-if="contractDeployTime">{{ contractDeployTime }}</template>
+    </div>
+    <div class="result-item">
+      amount of transactions:
+      <div v-if="isLoadingNativeTransactions" class="loader"></div>
+      <template v-else-if="nativeTransactions?.total || nativeTransactions?.total === 0">{{ nativeTransactions.total }}</template>
+    </div>
   </div>
 </template>
 
@@ -40,17 +45,35 @@ const analyzeContract = async (): Promise<void> => {
 
 
 <style>
+.wrapper {
+  display: grid;
+  place-items: center;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+.input-wrapper {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+
+.input {
+  width: 25rem;
+}
+
 .loader {
   display: inline-block;
-  width: 24px;
-  height: 24px;
+  width: 35px;
+  height: 35px;
 }
 
 .loader:after {
   content: " ";
   display: block;
-  width: 16px;
-  height: 16px;
+  width: 30px;
+  height: 30px;
   margin: 8px;
   border-radius: 50%;
   border: 4px solid black;
@@ -69,5 +92,9 @@ const analyzeContract = async (): Promise<void> => {
 
 .contract-deploy-time {
   margin-bottom: 0.5rem;
+}
+
+.result-item {
+  font-size: 2rem;
 }
 </style>
